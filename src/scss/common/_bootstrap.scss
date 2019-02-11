@@ -1,0 +1,64 @@
+//
+// 그리드
+// --------------------------------------------------
+// <div class="row">
+// 	<div class="test-col col-5-12">5-12</div>
+// 	<div class="test-col col-5-12 col-offset-2-12">5-12</div>
+// </div>
+
+// mixin
+@mixin generate-grid($columns, $size: '') {
+	@for $i from 1 through $columns {
+		$width: calc(100% / ( #{$columns} / #{$i} ));
+		@if($size == '') {
+			.col-#{$i}-#{$columns} {
+				width: $width;
+			}
+			.col-offset-#{$i}-#{$columns} {
+				margin-left: $width;
+			}
+		}
+		@else {
+			.col-#{$size}-#{$i}-#{$columns} {
+				width: $width;
+			}
+			.col-#{$size}-offset-#{$i}-#{$columns} {
+				margin-left: $width;
+			}
+		}
+	}
+}
+
+// 생성
+@include generate-grid(12);
+
+/* 그리드 컨테이너 */
+.row {
+	&:after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+
+	/* 그리드 중간여백 스타일 */
+	&.space {
+		margin: 0 -1%;
+
+		> [class*="col-"] {
+			padding: 0 1%;
+		}
+	}
+}
+
+/* col */
+[class*="col-"] {
+	box-sizing: border-box;
+	float: left;
+}
+
+/* 영역 테스트용 col */
+.test-col {
+	padding: 5px;
+	background: #fafafa;
+	border: 1px solid #aaa;
+}
